@@ -1,0 +1,23 @@
+{{define "titulo"}}Clientes{{end}}
+{{define "conteudo"}}
+<h1>Clientes</h1>
+{{with .Mensagem}}<p class="mensagem" id="mensagem">{{.}}</p>{{end}}
+<div class="cartao">
+  <form method="get" action="/clientes" class="filtros">
+    <div><label for="busca">Buscar por nome ou CPF</label><input id="busca" name="busca" value="{{.Busca}}"></div>
+    <div><button class="primario" id="buscar" type="submit">Buscar</button></div>
+  </form>
+  <a class="botao" id="novo-cliente" href="/clientes/novo">Novo cliente</a>
+</div>
+<div class="cartao">
+  {{if .Clientes}}
+  <table id="tabela-clientes">
+    <tr><th>Nome</th><th>CPF</th><th>E-mail</th><th>Telefone</th><th></th></tr>
+    {{range .Clientes}}
+    <tr data-cpf="{{.CPF}}"><td>{{.Nome}}</td><td>{{.CPF}}</td><td>{{.Email}}</td><td>{{.Telefone}}</td>
+      <td><a href="/ordens/nova?cliente_id={{.ID}}">Abrir OS</a></td></tr>
+    {{end}}
+  </table>
+  {{else}}<p id="sem-clientes">Nenhum cliente encontrado.</p>{{end}}
+</div>
+{{end}}

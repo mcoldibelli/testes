@@ -1,0 +1,24 @@
+{{define "titulo"}}Nova ordem{{end}}
+{{define "conteudo"}}
+<h1>Nova ordem de serviço</h1>
+<div class="cartao">
+  {{if .Erros}}<p class="erro" id="erro">Corrija os campos marcados.</p>{{end}}
+  <form method="post" action="/ordens" novalidate>
+    <label for="cliente_id">Cliente</label>
+    <select id="cliente_id" name="cliente_id"><option value="">Selecione</option>
+      {{range .Clientes}}<option value="{{.ID}}" {{if eq (printf "%d" .ID) $.Form.cliente_id}}selected{{end}}>{{.Nome}}</option>{{end}}</select>
+    {{with .Erros.cliente_id}}<span class="erro-campo" id="erro-cliente_id">{{.}}</span>{{end}}
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" rows="4">{{.Form.descricao}}</textarea>
+    {{with .Erros.descricao}}<span class="erro-campo" id="erro-descricao">{{.}}</span>{{end}}
+    <label for="prioridade">Prioridade</label>
+    <select id="prioridade" name="prioridade"><option value="">Selecione</option>
+      {{range .Prioridades}}<option value="{{.}}" {{if eq (printf "%s" .) $.Form.prioridade}}selected{{end}}>{{.}}</option>{{end}}</select>
+    {{with .Erros.prioridade}}<span class="erro-campo" id="erro-prioridade">{{.}}</span>{{end}}
+    <label for="valor">Valor estimado (R$)</label>
+    <input id="valor" name="valor" value="{{.Form.valor}}" placeholder="1234,56">
+    {{with .Erros.valor}}<span class="erro-campo" id="erro-valor">{{.}}</span>{{end}}
+    <button class="primario" id="salvar" type="submit">Abrir ordem</button>
+  </form>
+</div>
+{{end}}

@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+defaults:
+  run:
+    shell: bash # com "shell: bash" explícito o GitHub usa -eo pipefail: falha no "go test | tee" para o job
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Preparar pasta de resultados
+        run: mkdir -p resultados
+
+      - name: Análise estática (go vet)
+        run: go vet ./...
+
+      - name: Testes unitários e de integração (Go)
+        run: go test -count=1 -race -v -coverprofile=coverage.out ./... | tee resultados/go-test.txt
+
+      - name: Cobertura de código
+        run: go tool cover -func=coverage.out | tee resultados/cobertura.txt | tail -1
+
+      - name: Compilar e iniciar o sistema
+        run: |
+          go build -o bin/server ./cmd/server
+          ./bin/server -reset -db /tmp/ci.db > resultados/servidor.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:8080/health && exit 0
+            sleep 1
+          done
+          echo "o sistema não respondeu em 30 s" && exit 1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Testes de API (Postman/Newman)
+        run: >
+          npx --yes newman@6 run tests/postman/ordens-servico.postman_collection.json
+          -e tests/postman/local.postman_environment.json
+          --reporters cli,junit --reporter-junit-export resultados/newman.xml
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Testes de sistema (Selenium)
+        working-directory: tests/e2e
+        run: |
+          pip install -r requirements.txt
+          pytest -v --junitxml=../../resultados/e2e.xml
+
+      - name: Publicar resultados
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultados-${{ github.run_number }}
+          path: |
+            resultados/
+            coverage.out
+            tests/e2e/evidencias/

@@ -1,0 +1,12 @@
+bin/
+dados/
+entrega/
+coverage.out
+resultados/
+.scannerwork/
+tests/e2e/.venv/
+tests/e2e/evidencias/
+__pycache__/
+.pytest_cache/
+tools/.venv/
+tools/.recalc/

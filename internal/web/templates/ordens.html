@@ -1,0 +1,30 @@
+{{define "titulo"}}Ordens de serviço{{end}}
+{{define "conteudo"}}
+<h1>Ordens de serviço</h1>
+{{with .Mensagem}}<p class="mensagem" id="mensagem">{{.}}</p>{{end}}
+{{if .Erros}}<p class="erro" id="erro">{{range .Erros}}{{.}} {{end}}</p>{{end}}
+<div class="cartao">
+  <form method="get" action="/ordens" class="filtros">
+    <div><label for="filtro-status">Status</label>
+      <select id="filtro-status" name="status"><option value="">Todos</option>
+        {{range .Status}}<option value="{{.}}" {{if eq . $.Filtro.Status}}selected{{end}}>{{.}}</option>{{end}}</select></div>
+    <div><label for="filtro-prioridade">Prioridade</label>
+      <select id="filtro-prioridade" name="prioridade"><option value="">Todas</option>
+        {{range .Prioridades}}<option value="{{.}}" {{if eq . $.Filtro.Prioridade}}selected{{end}}>{{.}}</option>{{end}}</select></div>
+    <div><button class="primario" id="filtrar" type="submit">Filtrar</button></div>
+  </form>
+  <a class="botao" id="nova-ordem" href="/ordens/nova">Nova ordem</a>
+</div>
+<div class="cartao">
+  {{if .Ordens}}
+  <table id="tabela-ordens">
+    <tr><th>Nº</th><th>Cliente</th><th>Descrição</th><th>Prioridade</th><th>Status</th><th>Prazo</th><th>Valor</th></tr>
+    {{range .Ordens}}
+    <tr data-id="{{.ID}}"><td><a href="/ordens/{{.ID}}">{{.ID}}</a></td><td>{{index $.Nomes .ClienteID}}</td><td>{{.Descricao}}</td>
+      <td>{{.Prioridade}}</td><td class="status">{{.Status}}</td>
+      <td {{if .Atrasada}}class="atrasada"{{end}}>{{data .Prazo}}{{if .Atrasada}} (atrasada){{end}}</td><td>{{valor .ValorCentavos}}</td></tr>
+    {{end}}
+  </table>
+  {{else}}<p id="sem-ordens">Nenhuma ordem encontrada.</p>{{end}}
+</div>
+{{end}}

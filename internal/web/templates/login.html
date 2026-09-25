@@ -1,0 +1,14 @@
+{{define "titulo"}}Entrar{{end}}
+{{define "conteudo"}}
+<div class="cartao" style="max-width:380px;margin:60px auto">
+  <h1>Ordens de Serviço</h1>
+  {{with .Erro}}<p class="erro" id="erro">{{.}}</p>{{end}}
+  <form method="post" action="/login">
+    <label for="email">E-mail</label>
+    <input id="email" name="email" type="email" value="{{.Email}}" required>
+    <label for="senha">Senha</label>
+    <input id="senha" name="senha" type="password" required>
+    <button class="primario" id="entrar" type="submit">Entrar</button>
+  </form>
+</div>
+{{end}}

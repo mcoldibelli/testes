@@ -1,0 +1,18 @@
+{{define "titulo"}}Painel{{end}}
+{{define "conteudo"}}
+<h1>Painel</h1>
+<div class="indicadores">
+  <div>Total<strong id="total">{{.Resumo.Total}}</strong></div>
+  {{range .Status}}<div>{{.}}<strong id="qtd-{{.}}">{{index $.Resumo.PorStatus .}}</strong></div>{{end}}
+  <div>Atrasadas<strong id="qtd-atrasadas" class="atrasada">{{.Resumo.Atrasadas}}</strong></div>
+</div>
+<div class="cartao" style="margin-top:16px">
+  <h2>Ordens atrasadas</h2>
+  {{if .Atrasadas}}
+  <table id="tabela-atrasadas">
+    <tr><th>Nº</th><th>Descrição</th><th>Prioridade</th><th>Prazo</th></tr>
+    {{range .Atrasadas}}<tr><td><a href="/ordens/{{.ID}}">{{.ID}}</a></td><td>{{.Descricao}}</td><td>{{.Prioridade}}</td><td>{{data .Prazo}}</td></tr>{{end}}
+  </table>
+  {{else}}<p id="sem-atrasadas">Nenhuma ordem atrasada.</p>{{end}}
+</div>
+{{end}}

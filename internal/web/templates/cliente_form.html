@@ -1,0 +1,22 @@
+{{define "titulo"}}Novo cliente{{end}}
+{{define "conteudo"}}
+<h1>Novo cliente</h1>
+<div class="cartao">
+  {{if .Erros}}<p class="erro" id="erro">Corrija os campos marcados.</p>{{end}}
+  <form method="post" action="/clientes" novalidate>
+    <label for="nome">Nome</label>
+    <input id="nome" name="nome" value="{{.Form.nome}}">
+    {{with .Erros.nome}}<span class="erro-campo" id="erro-nome">{{.}}</span>{{end}}
+    <label for="cpf">CPF</label>
+    <input id="cpf" name="cpf" value="{{.Form.cpf}}" placeholder="000.000.000-00">
+    {{with .Erros.cpf}}<span class="erro-campo" id="erro-cpf">{{.}}</span>{{end}}
+    <label for="email">E-mail</label>
+    <input id="email" name="email" value="{{.Form.email}}">
+    {{with .Erros.email}}<span class="erro-campo" id="erro-email">{{.}}</span>{{end}}
+    <label for="telefone">Telefone (opcional)</label>
+    <input id="telefone" name="telefone" value="{{.Form.telefone}}" placeholder="(14) 99999-9999">
+    {{with .Erros.telefone}}<span class="erro-campo" id="erro-telefone">{{.}}</span>{{end}}
+    <button class="primario" id="salvar" type="submit">Salvar</button>
+  </form>
+</div>
+{{end}}

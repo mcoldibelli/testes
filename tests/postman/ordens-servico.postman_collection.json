@@ -1,0 +1,785 @@
+{
+  "info": {
+    "_postman_id": "827c6ab3-a2d6-49e2-b3c6-7b433e9636e4",
+    "name": "Ordens de Serviço - Testes de API",
+    "description": "Testes de integração/API do projeto P2 de Testes e Qualidade de Software. Execute na ordem: as requisições compartilham token, cliente e ordem.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "API-01 Health check",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"corpo informa ok\", () => pm.expect(pm.response.json().status).to.eql(\"ok\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "health"
+          ]
+        }
+      }
+    },
+    {
+      "name": "API-02 Login com senha inválida (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 401\", () => pm.response.to.have.status(401));",
+              "pm.test(\"não devolve token\", () => pm.expect(pm.response.json()).to.not.have.property(\"token\"));",
+              "pm.test(\"mensagem genérica\", () => pm.expect(pm.response.json().erro).to.eql(\"e-mail ou senha inválidos\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@teste.local\",\n  \"senha\": \"senha-errada\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-03 Login válido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "const corpo = pm.response.json();",
+              "pm.test(\"contrato: token é texto não vazio\", () => {",
+              "  pm.expect(corpo.token).to.be.a(\"string\");",
+              "  pm.expect(corpo.token.length).to.be.above(10);",
+              "});",
+              "pm.collectionVariables.set(\"token\", corpo.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/login",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "login"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"admin@teste.local\",\n  \"senha\": \"Admin@123\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-04 Listar clientes sem token (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 401\", () => pm.response.to.have.status(401));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/clientes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        }
+      }
+    },
+    {
+      "name": "API-05 Criar cliente válido",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "// Gera um CPF válido e fictício a cada execução, para o teste poder ser repetido.",
+              "function dv(base) {",
+              "  let soma = 0;",
+              "  for (let i = 0; i < base.length; i++) soma += Number(base[i]) * (base.length + 1 - i);",
+              "  const resto = soma % 11;",
+              "  return resto < 2 ? 0 : 11 - resto;",
+              "}",
+              "let base = \"\";",
+              "for (let i = 0; i < 9; i++) base += Math.floor(Math.random() * 10);",
+              "if (/^(\\d)\\1+$/.test(base)) base = \"123456780\";",
+              "let cpf = base + dv(base);",
+              "cpf += dv(cpf);",
+              "pm.collectionVariables.set(\"cpf\", cpf);"
+            ]
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+              "const c = pm.response.json();",
+              "pm.test(\"contrato: campos e tipos\", () => {",
+              "  pm.expect(c.id).to.be.a(\"number\");",
+              "  pm.expect(c.nome).to.eql(\"Cliente Postman\");",
+              "  pm.expect(c.criado_em).to.be.a(\"string\");",
+              "});",
+              "pm.test(\"CPF gravado só com dígitos\", () => pm.expect(c.cpf).to.eql(pm.collectionVariables.get(\"cpf\")));",
+              "pm.test(\"e-mail normalizado em minúsculas\", () => pm.expect(c.email).to.eql(\"cliente.postman@teste.local\"));",
+              "pm.collectionVariables.set(\"clienteId\", c.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/clientes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Cliente Postman\",\n  \"cpf\": \"{{cpf}}\",\n  \"email\": \"Cliente.Postman@teste.local\",\n  \"telefone\": \"(14) 99999-0000\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-06 Criar cliente com CPF inválido (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"erro no campo cpf\", () => pm.expect(pm.response.json().campos).to.have.property(\"cpf\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/clientes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Cliente Postman\",\n  \"cpf\": \"529.982.247-24\",\n  \"email\": \"x@teste.local\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-07 Criar cliente com CPF duplicado (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"mensagem de CPF duplicado\", () => pm.expect(pm.response.json().erro).to.eql(\"CPF já cadastrado\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/clientes",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "clientes"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Outro Cliente\",\n  \"cpf\": \"{{cpf}}\",\n  \"email\": \"outro@teste.local\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-08 Abrir OS CRITICA para o cliente criado",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 201\", () => pm.response.to.have.status(201));",
+              "const o = pm.response.json();",
+              "pm.test(\"status inicial ABERTA\", () => pm.expect(o.status).to.eql(\"ABERTA\"));",
+              "pm.test(\"prazo = abertura + 4 h (SLA CRITICA)\", () => {",
+              "  const horas = (new Date(o.prazo) - new Date(o.aberta_em)) / 3600000;",
+              "  pm.expect(horas).to.eql(4);",
+              "});",
+              "pm.test(\"vinculada ao cliente\", () => pm.expect(o.cliente_id).to.eql(Number(pm.collectionVariables.get(\"clienteId\"))));",
+              "pm.collectionVariables.set(\"ordemId\", o.id);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente_id\": {{clienteId}},\n  \"descricao\": \"Central de alarme sem comunicação\",\n  \"prioridade\": \"CRITICA\",\n  \"valor_centavos\": 35000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-09 Abrir OS para cliente inexistente (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"erro no campo cliente_id\", () => pm.expect(pm.response.json().campos.cliente_id).to.eql(\"cliente não encontrado\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente_id\": 999999,\n  \"descricao\": \"Central de alarme sem comunicação\",\n  \"prioridade\": \"ALTA\",\n  \"valor_centavos\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-10 Abrir OS com descrição de 9 caracteres (limite)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+              "pm.test(\"erro no campo descricao\", () => pm.expect(pm.response.json().campos).to.have.property(\"descricao\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cliente_id\": {{clienteId}},\n  \"descricao\": \"123456789\",\n  \"prioridade\": \"ALTA\",\n  \"valor_centavos\": 0\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-11 Iniciar OS (ABERTA -> EM_ANDAMENTO)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"status EM_ANDAMENTO\", () => pm.expect(pm.response.json().status).to.eql(\"EM_ANDAMENTO\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens/{{ordemId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens",
+            "{{ordemId}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"EM_ANDAMENTO\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-12 Concluir OS (EM_ANDAMENTO -> CONCLUIDA)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "const o = pm.response.json();",
+              "pm.test(\"status CONCLUIDA\", () => pm.expect(o.status).to.eql(\"CONCLUIDA\"));",
+              "pm.test(\"data de conclusão preenchida\", () => pm.expect(o.concluida_em).to.be.a(\"string\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens/{{ordemId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens",
+            "{{ordemId}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"CONCLUIDA\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-13 Cancelar OS concluída (negativo)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 409\", () => pm.response.to.have.status(409));",
+              "pm.test(\"mensagem de transição inválida\", () => pm.expect(pm.response.json().erro).to.include(\"transição de status não permitida\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens/{{ordemId}}/status",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens",
+            "{{ordemId}}",
+            "status"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"CANCELADA\",\n  \"motivo\": \"Cliente desistiu do serviço\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "API-14 Buscar OS gravada",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "pm.test(\"status persistido CONCLUIDA\", () => pm.expect(pm.response.json().status).to.eql(\"CONCLUIDA\"));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens/{{ordemId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens",
+            "{{ordemId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "API-15 Filtrar ordens por status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "const ordens = pm.response.json();",
+              "pm.test(\"lista contém a OS concluída\", () => pm.expect(ordens.map(o => o.id)).to.include(Number(pm.collectionVariables.get(\"ordemId\"))));",
+              "pm.test(\"todas as ordens são CONCLUIDA\", () => ordens.forEach(o => pm.expect(o.status).to.eql(\"CONCLUIDA\")));"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/ordens?status=CONCLUIDA",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "ordens"
+          ],
+          "query": [
+            {
+              "key": "status",
+              "value": "CONCLUIDA"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "API-16 Resumo do painel",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+              "const r = pm.response.json();",
+              "pm.test(\"contrato: total, por_status e atrasadas\", () => {",
+              "  pm.expect(r.total).to.be.a(\"number\");",
+              "  pm.expect(r.atrasadas).to.be.a(\"number\");",
+              "  pm.expect(r.por_status).to.have.all.keys(\"ABERTA\", \"EM_ANDAMENTO\", \"CONCLUIDA\", \"CANCELADA\");",
+              "});",
+              "pm.test(\"soma por status = total\", () => {",
+              "  const soma = Object.values(r.por_status).reduce((a, b) => a + b, 0);",
+              "  pm.expect(soma).to.eql(r.total);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/resumo",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "resumo"
+          ]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "cpf",
+      "value": ""
+    },
+    {
+      "key": "clienteId",
+      "value": ""
+    },
+    {
+      "key": "ordemId",
+      "value": ""
+    }
+  ]
+}
