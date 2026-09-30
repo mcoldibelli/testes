@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progresso do P2</title>
+<link rel="icon" href="data:,">
+<style>
+  :root {
+    --fundo: #f4f5f7; --cartao: #ffffff; --texto: #1d2330; --suave: #5c6677; --linha: #e3e6eb;
+    --barra: #e3e6eb; --ok: #1e8e3e; --falha: #c5221f; --bloq: #b06000; --pend: #9aa3b0; --destaque: #1f6feb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fundo: #14171c; --cartao: #1d2128; --texto: #e6e8eb; --suave: #9aa3b0; --linha: #2c313a;
+      --barra: #2c313a; --ok: #34a853; --falha: #ea4335; --bloq: #f29900; --pend: #5c6677; --destaque: #4c8dff;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: system-ui, sans-serif; background: var(--fundo); color: var(--texto); }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+  header { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin-bottom: 20px; }
+  h1 { font-size: 1.4rem; margin: 0; }
+  h2 { font-size: 1rem; margin: 0 0 12px; }
+  .suave { color: var(--suave); font-size: .85rem; }
+  .total { margin-left: auto; text-align: right; }
+  .total strong { font-size: 2.2rem; display: block; line-height: 1; }
+  .grade { display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px; }
+  @media (max-width: 800px) { .grade { grid-template-columns: 1fr; } .total { margin-left: 0; text-align: left; } }
+  .cartao { background: var(--cartao); border: 1px solid var(--linha); border-radius: 10px; padding: 16px; }
+  .etapa { display: grid; grid-template-columns: 1fr 70px; gap: 4px 12px; padding: 8px 0; border-bottom: 1px solid var(--linha); }
+  .etapa:last-child { border-bottom: 0; }
+  .etapa .nome { font-size: .92rem; }
+  .etapa .num { text-align: right; font-variant-numeric: tabular-nums; font-size: .85rem; color: var(--suave); }
+  .etapa .barra { grid-column: 1 / -1; height: 6px; background: var(--barra); border-radius: 3px; overflow: hidden; }
+  .etapa .barra span { display: block; height: 100%; background: var(--destaque); border-radius: 3px; }
+  .etapa.completa .barra span { background: var(--ok); }
+  .etapa .det { grid-column: 1 / -1; font-size: .78rem; color: var(--suave); }
+  .casos { display: grid; grid-template-columns: repeat(auto-fill, minmax(62px, 1fr)); gap: 6px; }
+  .caso { border-radius: 6px; padding: 8px 4px; text-align: center; font-size: .8rem; font-weight: 600; color: #fff; cursor: default; }
+  .Aprovado { background: var(--ok); } .Reprovado { background: var(--falha); }
+  .Bloqueado { background: var(--bloq); } .pendente { background: var(--pend); }
+  .legenda { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; font-size: .8rem; color: var(--suave); }
+  .legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+  table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--linha); vertical-align: top; }
+  th { color: var(--suave); font-weight: 600; }
+  .pilha { display: grid; gap: 16px; }
+  .aviso { background: var(--falha); color: #fff; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; display: none; }
+  code { font-size: .8rem; color: var(--suave); }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div>
+      <h1>Projeto P2: Testes e Qualidade de Software</h1>
+      <div class="suave">Ordens de Serviço · atualizado às <span id="hora">-</span> · consulta a cada 5 s</div>
+    </div>
+    <div class="total"><strong id="pct">-</strong><span class="suave">das etapas concluído</span></div>
+  </header>
+  <div class="aviso" id="aviso"></div>
+
+  <div class="grade">
+    <section class="cartao">
+      <h2>Etapas até a entrega</h2>
+      <div id="etapas"></div>
+    </section>
+
+    <div class="pilha">
+      <section class="cartao">
+        <h2>Execução manual: <span id="resumo-casos"></span></h2>
+        <div class="casos" id="casos"></div>
+        <div class="legenda">
+          <span><i class="Aprovado"></i>Aprovado</span><span><i class="Reprovado"></i>Reprovado</span>
+          <span><i class="Bloqueado"></i>Bloqueado</span><span><i class="pendente"></i>Não executado</span>
+        </div>
+      </section>
+
+      <section class="cartao">
+        <h2>Defeitos</h2>
+        <div id="defeitos"></div>
+      </section>
+
+      <section class="cartao">
+        <h2>Diário e commits</h2>
+        <div class="suave" id="diario"></div>
+        <table><tbody id="commits"></tbody></table>
+      </section>
+    </div>
+  </div>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+function desenhar(d) {
+  $("hora").textContent = d.atualizado;
+
+  const fracoes = d.etapas.map((e) => (e.total ? e.feito / e.total : 0));
+  $("pct").textContent = Math.round((100 * fracoes.reduce((a, b) => a + b, 0)) / fracoes.length) + "%";
+  $("etapas").innerHTML = d.etapas.map((e, i) => {
+    const p = e.total ? Math.round((100 * e.feito) / e.total) : 0;
+    return `<div class="etapa ${p === 100 ? "completa" : ""}">
+      <span class="nome">${esc(e.nome)}</span><span class="num">${e.feito}/${e.total}</span>
+      <div class="barra"><span style="width:${p}%"></span></div>
+      ${e.detalhe ? `<span class="det">${esc(e.detalhe)}</span>` : ""}</div>`;
+  }).join("");
+
+  const cont = (r) => d.casos.filter((c) => c.resultado === r).length;
+  const exec = cont("Aprovado") + cont("Reprovado");
+  $("resumo-casos").textContent = `${exec} de ${d.casos.length} executados · ${cont("Aprovado")} aprovados · ${cont("Reprovado")} reprovados`;
+  $("casos").innerHTML = d.casos.map((c) => {
+    const classe = ["Aprovado", "Reprovado", "Bloqueado"].includes(c.resultado) ? c.resultado : "pendente";
+    const dica = `${c.id} ${c.titulo} (${c.requisito}) - ${c.resultado}${c.data ? " em " + c.data : ""}`;
+    return `<div class="caso ${classe}" title="${esc(dica)}">${esc(c.id.replace("CT-", ""))}</div>`;
+  }).join("");
+
+  $("defeitos").innerHTML = d.defeitos.length
+    ? `<table><thead><tr><th>ID</th><th>Título</th><th>Caso</th><th>Severidade</th><th>Status</th></tr></thead><tbody>
+        ${d.defeitos.map((x) => `<tr><td>${esc(x.id)}</td><td>${esc(x.titulo)}</td><td>${esc(x.caso)}</td>
+        <td>${esc(x.severidade)}</td><td>${esc(x.status)}</td></tr>`).join("")}</tbody></table>`
+    : `<span class="suave">Nenhum defeito registrado na planilha.</span>`;
+
+  const di = d.diario;
+  $("diario").innerHTML = `${di.registros} registros no Diário · ${di.horas.toLocaleString("pt-BR")} h no total` +
+    (di.ultimo ? `<br>Último: ${esc(di.ultimo.data)} · ${esc(di.ultimo.atividade)}` : "");
+  $("commits").innerHTML = d.commits.map((l) => {
+    const [h, data, ...msg] = l.split("|");
+    return `<tr><td><code>${esc(h)}</code></td><td class="suave">${esc(data)}</td><td>${esc(msg.join("|"))}</td></tr>`;
+  }).join("");
+}
+
+async function atualizar() {
+  try {
+    const r = await fetch("/dados.json", { cache: "no-store" });
+    const d = await r.json();
+    if (d.erro) throw new Error(d.erro);
+    desenhar(d);
+    $("aviso").style.display = "none";
+  } catch (e) {
+    // Mantém os últimos dados na tela; mostra o motivo (ex.: planilha sendo gravada, painel parado).
+    $("aviso").textContent = "Não foi possível ler os dados agora: " + e.message;
+    $("aviso").style.display = "block";
+  }
+}
+atualizar();
+setInterval(atualizar, 5000);
+</script>
+</body>
+</html>

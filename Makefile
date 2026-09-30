@@ -2,7 +2,7 @@ DB ?= dados/ordens.db
 export SONAR_TOKEN # vale também para "make sonar SONAR_TOKEN=..."
 E2E_VENV = tests/e2e/.venv
 
-.PHONY: run reset test-unit test-integracao cobertura test-api e2e-setup test-e2e sonar-up sonar entrega
+.PHONY: run reset test-unit test-integracao cobertura test-api e2e-setup test-e2e sonar-up sonar entrega painel
 
 run:             ## inicia o sistema em http://localhost:8080
 	go run ./cmd/server -db $(DB)
@@ -43,3 +43,6 @@ sonar: cobertura ## analisa o projeto no SonarQube local (exige SONAR_TOKEN no a
 
 entrega:         ## cria a estrutura de pastas do Drive (seção 11.3) em ./entrega
 	sh tools/montar_entrega.sh
+
+painel:          ## painel de progresso em http://localhost:8090 (lê planilha, git e docs a cada consulta)
+	tools/.venv/bin/python tools/painel.py

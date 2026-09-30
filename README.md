@@ -101,7 +101,8 @@ Abra <http://localhost:8080>. Para parar: `Ctrl+C` (o servidor termina as requis
 | Sistema/interface (ST-01 a ST-06) | `make test-e2e` | Sim |
 | Compatibilidade Firefox | `BROWSER=firefox make test-e2e` | Sim |
 | Desempenho (NF-01, NF-02) | `python3 tools/medir_desempenho.py listagem` e `... login` | Sim (use `make reset` antes) |
-| Análise de qualidade | `make sonar-up` e depois `make sonar SONAR_TOKEN=<token>` | Não |
+| Análise de qualidade | `make sonar-up` e depois `export SONAR_TOKEN=<token>` e `make sonar` | Não |
+| Painel de progresso | `make painel` e abrir http://localhost:8090 | Não |
 
 Os testes Selenium salvam uma captura de tela de cada teste em `tests/e2e/evidencias/`.
 Quando um teste falha, eles salvam também o HTML da página e o erro completo.
