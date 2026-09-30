@@ -59,9 +59,9 @@ Somente dados fictícios. `-reset` cria 2 usuários, 3 clientes e 6 OS. Os scrip
 
 | Papel | Integrante | Atividades |
 |---|---|---|
-| Coordenação e planejamento | _preencher_ | plano, riscos, cronograma, diário, relatório |
-| Análise e execução manual | _preencher_ | casos, execução, evidências, defeitos, aceitação |
-| Automação e qualidade | _preencher_ | scripts, pipeline, SonarQube, métricas, TDD |
+| Coordenação e planejamento | Marcelo A. B. Coldibelli | plano, riscos, cronograma, diário, relatório |
+| Análise e execução manual | Marcelo A. B. Coldibelli | casos, execução, evidências, defeitos, aceitação |
+| Automação e qualidade | Marcelo A. B. Coldibelli | scripts, pipeline, SonarQube, métricas, TDD |
 
 ## Critérios de entrada
 

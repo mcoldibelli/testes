@@ -4,11 +4,11 @@
 
 | Nome | RA | Papel |
 |---|---|---|
-| _preencher_ | _preencher_ | Coordenação e planejamento |
-| _preencher_ | _preencher_ | Análise e execução manual |
-| _preencher_ | _preencher_ | Automação e qualidade |
+| Marcelo A. B. Coldibelli | 24210023 | Coordenação e planejamento; análise e execução manual; automação e qualidade |
 
-Turma: _preencher_ · Grupo: _preencher_ · Professor: Prof. Dr. Elvio Gilberto da Silva
+Trabalho individual: um integrante acumula os três papéis (manual, seção 4.2). Depende de autorização do professor (seção 4.1).
+
+Turma: B · Grupo: AP1-TIM 26 · Professor: Prof. Dr. Elvio Gilberto da Silva
 
 ## 2. Sistema e versão
 
@@ -19,7 +19,7 @@ Origem (manual, seção 5.2): sistema acadêmico desenvolvido pelo grupo.
 
 ## 3. Repositório
 
-_preencher com o link do GitHub_
+<https://github.com/mcoldibelli/testes>
 
 ## 4. Tecnologias
 
