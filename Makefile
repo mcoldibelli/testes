@@ -1,4 +1,5 @@
 DB ?= dados/ordens.db
+export SONAR_TOKEN # vale também para "make sonar SONAR_TOKEN=..."
 E2E_VENV = tests/e2e/.venv
 
 .PHONY: run reset test-unit test-integracao cobertura test-api e2e-setup test-e2e sonar-up sonar entrega
@@ -33,9 +34,12 @@ test-e2e:        ## testes de sistema com Selenium (o sistema precisa estar roda
 sonar-up:        ## sobe o SonarQube local em http://localhost:9000
 	docker run -d --name sonarqube -p 9000:9000 sonarqube:community
 
-sonar: cobertura ## analisa o projeto (exige SONAR_TOKEN gerado no SonarQube)
-	docker run --rm -e SONAR_HOST_URL=http://host.docker.internal:9000 -e SONAR_TOKEN=$(SONAR_TOKEN) \
-		-v "$(CURDIR):/usr/src" sonarsource/sonar-scanner-cli
+sonar: cobertura ## analisa o projeto no SonarQube local (exige SONAR_TOKEN no ambiente)
+	@test -n "$$SONAR_TOKEN" || (echo "defina SONAR_TOKEN antes: export SONAR_TOKEN=<token>" && exit 1)
+	# Scanner nativo via npm: a imagem Docker do scanner é só amd64 e, emulada no Mac Apple Silicon,
+	# fica lenta demais para a análise de CSS/JS ("bridge server is unresponsive").
+	# O token vem da variável de ambiente e não aparece na saída do make.
+	npx --yes sonarqube-scanner@4 -Dsonar.host.url=http://localhost:9000
 
 entrega:         ## cria a estrutura de pastas do Drive (seção 11.3) em ./entrega
 	sh tools/montar_entrega.sh

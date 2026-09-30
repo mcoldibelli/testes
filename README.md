@@ -51,7 +51,7 @@ Postman  ──JSON───┤→ internal/web (rotas, sessão) → internal/ap
 - Python 3.10 ou mais novo (testes Selenium)
 - Node.js 18 ou mais novo (Newman, via `npx`)
 - Google Chrome (e Firefox para o teste de compatibilidade)
-- Docker (somente para o SonarQube)
+- Docker (somente para o servidor do SonarQube; com 4 GB de memória no Docker Desktop funciona)
 - `make` (já vem no macOS e no Linux; no Windows, use os comandos do `Makefile` diretamente)
 
 ## 6. Instalação

@@ -37,16 +37,22 @@ Não crie o teste depois da implementação (manual, seção 9.14). A ordem dos 
 
 ## 4. Análise de qualidade: depois das correções e do TDD
 
-Repetir `make sonar SONAR_TOKEN=<token>` e comparar com a linha de base:
+Repetir `make sonar` (com `SONAR_TOKEN` no ambiente) e comparar com a linha de base.
+
+Linha de base: 29/09/2026, commit `e97db23`, SonarQube Community Build 26.9, perfil *Sonar way*, 1.629 linhas de código.
+Evidência: [`evidencias/SONAR_LINHA-DE-BASE_2026-09-29.png`](evidencias/SONAR_LINHA-DE-BASE_2026-09-29.png).
+Aviso da análise: a versão do Python não foi informada (`sonar.python.version`); afeta só os 2 scripts Selenium.
 
 | Indicador | Linha de base | Depois | Diferença | Interpretação |
 |---|---|---|---|---|
-| Bugs | | | | |
-| Vulnerabilidades | | | | |
-| Code smells | | | | |
-| Cobertura (%) | | | | |
-| Duplicação (%) | | | | |
-| Quality Gate | | | | |
+| Bugs | 0 | | | |
+| Vulnerabilidades | 0 (0 security hotspots) | | | |
+| Code smells | 0 | | | |
+| Cobertura (%) | 33,8 | | | |
+| Duplicação (%) | 0,0 | | | |
+| Quality Gate | Passed | | | |
+
+A cobertura do SonarQube (33,8%) conta linhas. O `go tool cover` (31,8%) conta instruções. Por isso os dois números são diferentes.
 
 ## 5. Plano de melhoria contínua
 
