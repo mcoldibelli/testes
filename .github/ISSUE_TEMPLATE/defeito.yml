@@ -1,0 +1,70 @@
+name: Defeito
+description: Relatório de defeito encontrado em teste (Apêndice G do manual)
+title: "[DEF] "
+labels: ["defeito"]
+body:
+  - type: input
+    id: relacionado
+    attributes:
+      label: Requisito e caso relacionados
+      placeholder: "RF-03 / CT-14"
+    validations:
+      required: true
+  - type: input
+    id: ambiente
+    attributes:
+      label: Ambiente e versão
+      placeholder: "macOS 26, Chrome 140, sistema 1.0.0 (commit f6557a1)"
+    validations:
+      required: true
+  - type: textarea
+    id: precondicoes
+    attributes:
+      label: Pré-condições
+  - type: textarea
+    id: dados
+    attributes:
+      label: Dados utilizados
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      value: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: obtido
+    attributes:
+      label: Resultado obtido
+    validations:
+      required: true
+  - type: dropdown
+    id: severidade
+    attributes:
+      label: Severidade
+      options: [Baixa, Média, Alta, Crítica]
+    validations:
+      required: true
+  - type: dropdown
+    id: prioridade
+    attributes:
+      label: Prioridade
+      options: [Baixa, Média, Alta]
+    validations:
+      required: true
+  - type: textarea
+    id: evidencias
+    attributes:
+      label: Evidências
+      description: Arraste o print aqui ou informe o nome do arquivo em docs/evidencias/execucao.
+    validations:
+      required: true
