@@ -198,7 +198,10 @@ func (s *Server) uiAbrirOrdem(w http.ResponseWriter, r *http.Request) {
 	clienteID, _ := strconv.ParseInt(form["cliente_id"], 10, 64) // texto inválido vira 0 e cai na RN de cliente obrigatório
 	valor, errValor := domain.ParseValor(form["valor"])
 
-	_, err := s.svc.AbrirOrdem(r.Context(), clienteID, form["descricao"], domain.Prioridade(form["prioridade"]), valor)
+	var err error
+	if errValor == nil { // valor inválido não grava a OS (DEF-02)
+		_, err = s.svc.AbrirOrdem(r.Context(), clienteID, form["descricao"], domain.Prioridade(form["prioridade"]), valor)
+	}
 	if err == nil && errValor == nil {
 		http.Redirect(w, r, "/ordens?criada=1", http.StatusSeeOther)
 		return

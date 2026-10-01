@@ -333,3 +333,64 @@ func TestUI_SessaoEFormulario(t *testing.T) {
 		t.Errorf("CPF inválido no formulário: status %d; quer 400 com erro-cpf", resp.StatusCode)
 	}
 }
+
+// IT-11 | RF-04 | DEF-02: valor em formato inválido no formulário mostra o erro e não grava a OS.
+func TestUI_ValorInvalidoNaoGravaOrdem(t *testing.T) {
+	a := novoAmbiente(t)
+	token := a.login(t)
+	clienteID := a.criarCliente(t, token, "52998224725")
+	cliente := &http.Client{CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}
+
+	resp, err := cliente.PostForm(a.url+"/login", url.Values{"email": {"admin@teste.local"}, "senha": {"Admin@123"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	resp.Body.Close()
+	var sessao *http.Cookie
+	for _, c := range resp.Cookies() {
+		if c.Name == "sessao" {
+			sessao = c
+		}
+	}
+	if sessao == nil {
+		t.Fatal("cookie de sessão ausente")
+	}
+
+	contarOrdens := func() int {
+		t.Helper()
+		req, _ := http.NewRequest("GET", a.url+"/api/ordens", nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+		var ordens []map[string]any
+		if err := json.NewDecoder(resp.Body).Decode(&ordens); err != nil {
+			t.Fatal(err)
+		}
+		return len(ordens)
+	}
+
+	for _, valor := range []string{"abc", "10,555"} {
+		antes := contarOrdens()
+		req, _ := http.NewRequest("POST", a.url+"/ordens", strings.NewReader(url.Values{
+			"cliente_id": {texto(clienteID)}, "descricao": {"Teste de valor limite"},
+			"prioridade": {"BAIXA"}, "valor": {valor},
+		}.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		req.AddCookie(sessao)
+		resp, err := cliente.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		corpo, _ := io.ReadAll(resp.Body)
+		resp.Body.Close()
+		if resp.StatusCode != http.StatusBadRequest || !strings.Contains(string(corpo), `id="erro-valor"`) {
+			t.Errorf("valor %q: status %d; quer 400 com erro-valor", valor, resp.StatusCode)
+		}
+		if depois := contarOrdens(); depois != antes {
+			t.Errorf("valor %q: %d ordens antes e %d depois; a OS não pode ser gravada", valor, antes, depois)
+		}
+	}
+}
