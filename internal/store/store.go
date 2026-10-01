@@ -131,10 +131,14 @@ func (s *Store) BuscarCliente(ctx context.Context, id int64) (domain.Cliente, er
 
 // ListarClientes filtra por parte do nome ou do CPF. Devolve no máximo 200 registros.
 func (s *Store) ListarClientes(ctx context.Context, busca string) ([]domain.Cliente, error) {
-	padrao := "%" + strings.TrimSpace(busca) + "%"
+	termo := strings.TrimSpace(busca)
+	termoCPF := termo
+	if d := domain.SomenteDigitos(termo); d != "" && strings.Trim(termo, "0123456789.-") == "" {
+		termoCPF = d // CPF com máscara: o banco guarda só os dígitos (DEF-01)
+	}
 	rows, err := s.db.QueryContext(ctx,
 		`SELECT `+colunasCliente+` FROM clientes WHERE nome LIKE ? OR cpf LIKE ? ORDER BY nome LIMIT 200`,
-		padrao, padrao)
+		"%"+termo+"%", "%"+termoCPF+"%")
 	if err != nil {
 		return nil, fmt.Errorf("listar clientes: %w", err)
 	}

@@ -394,3 +394,35 @@ func TestUI_ValorInvalidoNaoGravaOrdem(t *testing.T) {
 		}
 	}
 }
+
+// IT-12 | RF-03 | DEF-01: busca por CPF com máscara encontra o cliente; números no meio do nome não buscam por CPF.
+func TestCliente_BuscaPorCPFComMascara(t *testing.T) {
+	a := novoAmbiente(t)
+	token := a.login(t)
+	a.criarCliente(t, token, "52998224725")
+
+	buscar := func(termo string) []map[string]any {
+		t.Helper()
+		req, _ := http.NewRequest("GET", a.url+"/api/clientes?busca="+url.QueryEscape(termo), nil)
+		req.Header.Set("Authorization", "Bearer "+token)
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			t.Fatal(err)
+		}
+		defer resp.Body.Close()
+		var clientes []map[string]any
+		if err := json.NewDecoder(resp.Body).Decode(&clientes); err != nil {
+			t.Fatal(err)
+		}
+		return clientes
+	}
+
+	for _, termo := range []string{"529.982.247-25", "529.982"} {
+		if c := buscar(termo); len(c) != 1 || c[0]["cpf"] != "52998224725" {
+			t.Errorf("busca %q devolveu %v; quer só o cliente de CPF 52998224725", termo, c)
+		}
+	}
+	if c := buscar("Cliente 9"); len(c) != 0 {
+		t.Errorf("busca \"Cliente 9\" devolveu %d clientes; quer 0", len(c))
+	}
+}
