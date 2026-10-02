@@ -116,3 +116,29 @@ def test_st06_cancelar_sem_motivo_mostra_erro(logado, espera):
     erro = espera.until(EC.visibility_of_element_located((By.ID, "erro")))
     assert "motivo" in erro.text
     assert driver.find_element(By.ID, "status-atual").text == "ABERTA"
+
+
+def test_st07_erro_do_ultimo_campo_fica_acima_do_botao(logado, espera):
+    """ST-07 | CT-11, CT-19 | RF-02, RF-04 | DEF-03"""
+    driver = logado
+
+    def assert_erro_acima_do_botao(id_erro):
+        erro = espera.until(EC.visibility_of_element_located((By.ID, id_erro))).rect
+        botao = driver.find_element(By.ID, "salvar").rect
+        assert erro["y"] + erro["height"] <= botao["y"], f"{id_erro} {erro} na linha do botão {botao}"
+
+    driver.get(BASE_URL + "/clientes/novo")
+    espera.until(EC.presence_of_element_located((By.ID, "nome"))).send_keys("Ana Souza")
+    driver.find_element(By.ID, "cpf").send_keys(cpf_ficticio())
+    driver.find_element(By.ID, "email").send_keys("ana@teste.local")
+    driver.find_element(By.ID, "telefone").send_keys("999994444")
+    enviar(driver, "salvar")
+    assert_erro_acima_do_botao("erro-telefone")
+
+    driver.get(BASE_URL + "/ordens/nova")
+    Select(espera.until(EC.presence_of_element_located((By.ID, "cliente_id")))).select_by_visible_text("Mercado Bom Preço")
+    driver.find_element(By.ID, "descricao").send_keys("Teste de valor limite")
+    Select(driver.find_element(By.ID, "prioridade")).select_by_value("BAIXA")
+    driver.find_element(By.ID, "valor").send_keys("50000,01")
+    enviar(driver, "salvar")
+    assert_erro_acima_do_botao("erro-valor")
