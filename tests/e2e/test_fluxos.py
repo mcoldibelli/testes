@@ -142,3 +142,16 @@ def test_st07_erro_do_ultimo_campo_fica_acima_do_botao(logado, espera):
     driver.find_element(By.ID, "valor").send_keys("50000,01")
     enviar(driver, "salvar")
     assert_erro_acima_do_botao("erro-valor")
+
+
+def test_st08_listas_sem_rolagem_horizontal_em_tela_estreita(logado):
+    """ST-08 | NF-04 | RNF-02 | DEF-04"""
+    driver = logado
+    # O navegador pede 375 px, mas sem janela visível o Chrome e o Firefox usam no mínimo 500 px.
+    # As tabelas têm cerca de 670 px, então a rolagem horizontal também aparece em 500 px.
+    driver.set_window_size(375, 812)
+    for caminho in ("/clientes", "/ordens"):
+        driver.get(BASE_URL + caminho)
+        pagina = driver.execute_script("return document.documentElement.scrollWidth")
+        tela = driver.execute_script("return document.documentElement.clientWidth")
+        assert pagina <= tela, f"{caminho}: página com {pagina} px em tela de {tela} px"
