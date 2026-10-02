@@ -1,0 +1,8 @@
+# NF-05 | 01/10/2026 22:10:05 | commit 14c38fa
+## Senha: sqlite3 dados/ordens.db (banco do sistema na porta 8080, só leitura)
+$ sqlite3 dados/ordens.db "select email, length(senha_hash), typeof(senha_hash) from usuarios"
+admin@teste.local|32|blob
+tecnico@teste.local|32|blob
+## Cookie: cabeçalho Set-Cookie do POST /login (instância :8091)
+$ curl -s -i -X POST localhost:8091/login -d email=admin@teste.local -d senha=Admin@123 | grep -i set-cookie
+Set-Cookie: sessao=<token omitido>; Path=/; Max-Age=28800; HttpOnly; SameSite=Lax

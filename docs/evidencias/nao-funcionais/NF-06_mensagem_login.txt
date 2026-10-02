@@ -1,0 +1,12 @@
+# NF-06 | 01/10/2026 22:10:05 | commit 14c38fa | instância :8091
+## Senha errada (CT-02): admin@teste.local / senha-errada
+id="erro">e-mail ou senha inválidos<
+HTTP 401
+## E-mail inexistente (CT-03): naoexiste@teste.local / Admin@123
+id="erro">e-mail ou senha inválidos<
+HTTP 401
+## API: POST /api/login nos dois casos
+{"erro":"e-mail ou senha inválidos"}
+ HTTP 401
+{"erro":"e-mail ou senha inválidos"}
+ HTTP 401

@@ -1,0 +1,15 @@
+# NF-08 | 01/10/2026 22:09:47 | commit 14c38fa | instância :8091, banco dados/nf.db
+## 1. Criar 1 cliente e 1 OS
+{"id":10,"nome":"Cliente Reinicio NF08","cpf":"64556815177","email":"nf08@teste.local","criado_em":"2026-10-01T22:09:47.989498-03:00"}
+{"id":10,"cliente_id":10,"descricao":"OS criada antes do reinicio","prioridade":"MEDIA","status":"ABERTA","valor_centavos":12345,"aberta_em":"2026-10-01T22:09:48.01845-03:00","prazo":"2026-10-03T22:09:48.01845-03:00","atrasada":false}
+## 2. Parar com SIGINT (igual a Ctrl+C)
+PID 59056
+porta 8091 livre: servidor parado
+## 3. Iniciar sem -reset
+comando: bin/server-nf -addr :8091 -db dados/nf.db
+time=2026-10-01T22:09:49.111-03:00 level=INFO msg="servidor iniciado" endereco=:8091 banco=dados/nf.db
+## 4. Conferir
+{"id":10,"nome":"Cliente Reinicio NF08","cpf":"64556815177","email":"nf08@teste.local","criado_em":"2026-10-02T01:09:47.989498Z"}
+
+{"id":10,"cliente_id":10,"descricao":"OS criada antes do reinicio","prioridade":"MEDIA","status":"ABERTA","valor_centavos":12345,"aberta_em":"2026-10-02T01:09:48.01845Z","prazo":"2026-10-04T01:09:48.01845Z","atrasada":false}
+

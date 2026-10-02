@@ -1,0 +1,143 @@
+# NF-03 Firefox | 01/10/2026 22:08:42 | Mozilla Firefox 156.0.1 | commit 14c38fa | mesma instância :8091
+cd tests/e2e && .venv/bin/pytest -v
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-8.4.2, pluggy-1.6.0 -- /Users/mcoldibelli/Downloads/tqs-p2-ordens-servico/tests/e2e/.venv/bin/python3.14
+cachedir: .pytest_cache
+rootdir: /Users/mcoldibelli/Downloads/tqs-p2-ordens-servico/tests/e2e
+collecting ... collected 7 items
+
+test_fluxos.py::test_st01_login_valido_mostra_painel ERROR               [ 14%]
+test_fluxos.py::test_st02_login_invalido_mostra_erro PASSED              [ 28%]
+test_fluxos.py::test_st03_cadastrar_cliente_e_buscar_por_cpf PASSED      [ 42%]
+test_fluxos.py::test_st04_cpf_invalido_mostra_erro_e_mantem_dados PASSED [ 57%]
+test_fluxos.py::test_st05_abrir_ordem_e_concluir PASSED                  [ 71%]
+test_fluxos.py::test_st06_cancelar_sem_motivo_mostra_erro PASSED         [ 85%]
+test_fluxos.py::test_st07_erro_do_ultimo_campo_fica_acima_do_botao PASSED [100%]
+
+==================================== ERRORS ====================================
+____________ ERROR at setup of test_st01_login_valido_mostra_painel ____________
+
+    @pytest.fixture
+    def driver():
+        # O Selenium Manager baixa o driver certo (chromedriver ou geckodriver).
+        headless = os.environ.get("HEADLESS", "1") == "1"
+        if NAVEGADOR == "firefox":
+            opcoes = webdriver.FirefoxOptions()
+            if headless:
+                opcoes.add_argument("-headless")
+>           d = webdriver.Firefox(options=opcoes)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+conftest.py:32: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+.venv/lib/python3.14/site-packages/selenium/webdriver/firefox/webdriver.py:69: in __init__
+    super().__init__(command_executor=executor, options=self.options)
+.venv/lib/python3.14/site-packages/selenium/webdriver/common/webdriver.py:25: in __init__
+    super().__init__(*args, **kwargs)
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py:296: in __init__
+    self.start_session(capabilities)
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py:401: in start_session
+    response = self.execute(Command.NEW_SESSION, caps)["value"]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/webdriver.py:506: in execute
+    self.error_handler.check_response(response)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <selenium.webdriver.remote.errorhandler.ErrorHandler object at 0x107e88980>
+response = {'status': 500, 'value': '{"value":{"error":"unknown error","message":"Process (pid=59518) unexpectedly closed with status 0","stacktrace":""}}'}
+
+    def check_response(self, response: dict[str, Any]) -> None:
+        """Check that a JSON response from the WebDriver does not have an error.
+    
+        Args:
+            response: The JSON response from the WebDriver server as a dictionary
+                object.
+    
+        Raises:
+            WebDriverException: If the response contains an error message.
+        """
+        status = response.get("status", None)
+        if not status or status == ErrorCode.SUCCESS:
+            return
+        value = None
+        message = response.get("message", "")
+        screen: str = response.get("screen", "")
+        stacktrace = None
+        if isinstance(status, int):
+            value_json = response.get("value", None)
+            if value_json and isinstance(value_json, str):
+                try:
+                    value = json.loads(value_json)
+                    if isinstance(value, dict):
+                        if len(value) == 1:
+                            value = value["value"]
+                        status = value.get("error", None)
+                        if not status:
+                            status = value.get("status", ErrorCode.UNKNOWN_ERROR)
+                            message = value.get("value") or value.get("message")
+                            if not isinstance(message, str):
+                                value = message
+                                message = message.get("message") if isinstance(message, dict) else None
+                        else:
+                            message = value.get("message", None)
+                except ValueError:
+                    pass
+    
+        exception_class: type[WebDriverException]
+        e = ErrorCode()
+        error_codes = [item for item in dir(e) if not item.startswith("__")]
+        for error_code in error_codes:
+            error_info = getattr(ErrorCode, error_code)
+            if isinstance(error_info, list) and status in error_info:
+                exception_class = getattr(ExceptionMapping, error_code, WebDriverException)
+                break
+        else:
+            exception_class = WebDriverException
+    
+        if not value:
+            value = response["value"]
+        if isinstance(value, str):
+            raise exception_class(value)
+        if message == "" and "message" in value:
+            message = value["message"]
+    
+        screen = None  # type: ignore[assignment]
+        if "screen" in value:
+            screen = value["screen"]
+    
+        stacktrace = None
+        st_value = value.get("stackTrace") or value.get("stacktrace")
+        if st_value:
+            if isinstance(st_value, str):
+                stacktrace = st_value.split("\n")
+            else:
+                stacktrace = []
+                try:
+                    for frame in st_value:
+                        line = frame.get("lineNumber", "")
+                        file = frame.get("fileName", "<anonymous>")
+                        if line:
+                            file = f"{file}:{line}"
+                        meth = frame.get("methodName", "<anonymous>")
+                        if "className" in frame:
+                            meth = f"{frame['className']}.{meth}"
+                        msg = "    at %s (%s)"
+                        msg = msg % (meth, file)
+                        stacktrace.append(msg)
+                except TypeError:
+                    pass
+        if exception_class == UnexpectedAlertPresentException:
+            alert_text = None
+            if "data" in value:
+                alert_text = value["data"].get("text")
+            elif "alert" in value:
+                alert_text = value["alert"].get("text")
+            raise exception_class(message, screen, stacktrace, alert_text)
+>       raise exception_class(message, screen, stacktrace)
+E       selenium.common.exceptions.WebDriverException: Message: Process (pid=59518) unexpectedly closed with status 0
+
+.venv/lib/python3.14/site-packages/selenium/webdriver/remote/errorhandler.py:232: WebDriverException
+=========================== short test summary info ============================
+ERROR test_fluxos.py::test_st01_login_valido_mostra_painel - selenium.common.exceptions.WebDriverException: Message: Process (pid=59518)...
+========================= 6 passed, 1 error in 19.61s ==========================
+make: *** [test-e2e] Error 1

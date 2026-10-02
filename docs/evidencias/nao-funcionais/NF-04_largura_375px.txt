@@ -1,0 +1,9 @@
+# NF-04 (medição complementar) | 01/10/2026 22:29:53 | Chrome headless, emulação 'iPhone SE' (375 x 667) | sistema da porta 8080, commit 14c38fa
+# scrollWidth > clientWidth significa rolagem horizontal na página
+/login           scrollWidth=375 clientWidth=375 ok
+/                scrollWidth=375 clientWidth=375 ok
+/clientes        scrollWidth=680 clientWidth=375 ROLAGEM HORIZONTAL
+/clientes/novo   scrollWidth=375 clientWidth=375 ok
+/ordens          scrollWidth=669 clientWidth=375 ROLAGEM HORIZONTAL
+/ordens/nova     scrollWidth=375 clientWidth=375 ok
+/ordens/1        scrollWidth=375 clientWidth=375 ok

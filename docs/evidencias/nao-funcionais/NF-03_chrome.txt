@@ -1,0 +1,18 @@
+# NF-03 Chrome | 01/10/2026 22:39:32 | Google Chrome 154.0.8037.93 | commit 3347b2f | instância :8091 iniciada com -reset
+cd tests/e2e && .venv/bin/pytest -v
+============================= test session starts ==============================
+platform darwin -- Python 3.14.6, pytest-8.4.2, pluggy-1.6.0 -- /Users/mcoldibelli/Downloads/tqs-p2-ordens-servico/tests/e2e/.venv/bin/python3.14
+cachedir: .pytest_cache
+rootdir: /Users/mcoldibelli/Downloads/tqs-p2-ordens-servico/tests/e2e
+collecting ... collected 8 items
+
+test_fluxos.py::test_st01_login_valido_mostra_painel PASSED              [ 12%]
+test_fluxos.py::test_st02_login_invalido_mostra_erro PASSED              [ 25%]
+test_fluxos.py::test_st03_cadastrar_cliente_e_buscar_por_cpf PASSED      [ 37%]
+test_fluxos.py::test_st04_cpf_invalido_mostra_erro_e_mantem_dados PASSED [ 50%]
+test_fluxos.py::test_st05_abrir_ordem_e_concluir PASSED                  [ 62%]
+test_fluxos.py::test_st06_cancelar_sem_motivo_mostra_erro PASSED         [ 75%]
+test_fluxos.py::test_st07_erro_do_ultimo_campo_fica_acima_do_botao PASSED [ 87%]
+test_fluxos.py::test_st08_listas_sem_rolagem_horizontal_em_tela_estreita PASSED [100%]
+
+============================== 8 passed in 12.33s ==============================

@@ -1,0 +1,5 @@
+# NF-02 | 01/10/2026 22:08:13 | Apple M2 Pro, macOS 26.6.2, go1.26.5 | commit 14c38fa | instância :8091 iniciada com -reset
+medições (ms): 92.6, 62.8, 63.6, 63.5, 63.9, 63.9, 63.9, 63.2, 64.2, 64.7
+média = 66.6 ms | p95 = 92.6 ms | máx = 92.6 ms
+critério: média <= 1000 ms -> ATENDE
+evidência: resultados/desempenho_login_20261001-220814.csv
