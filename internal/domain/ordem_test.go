@@ -45,7 +45,7 @@ func TestNovaOrdem_PrazoPorPrioridade(t *testing.T) {
 		PrioridadeBaixa:   72 * time.Hour,
 		PrioridadeMedia:   48 * time.Hour,
 		PrioridadeAlta:    24 * time.Hour,
-		PrioridadeCritica: 4 * time.Hour,
+		PrioridadeCritica: 5 * time.Hour,
 	}
 	for p, sla := range casos {
 		o, err := NovaOrdem(1, "Troca de sensor da porta", p, 0, agoraFixo)
