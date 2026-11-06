@@ -16,7 +16,9 @@ func TestParseValor(t *testing.T) {
 		{"0,01", 1, true},
 		{"1500,505", 0, false},
 		{"-10", 0, false},
-		{"1.500,00", 0, false},
+		{"1.500,00", 150000, true},
+		{"12.345,6", 1234560, true},
+		{"1.50,00", 0, false},
 		{"abc", 0, false},
 	}
 	for _, c := range casos {
