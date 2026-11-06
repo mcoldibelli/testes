@@ -7,12 +7,16 @@ import (
 )
 
 var formatoValor = regexp.MustCompile(`^\d{1,9}([.,]\d{1,2})?$`)
+var formatoMilhar = regexp.MustCompile(`^\d{1,3}(\.\d{3})+,\d{1,2}$`)
 
 // ParseValor converte "1500", "1500,5" ou "1500.50" em centavos. Texto vazio vale zero.
 func ParseValor(s string) (int64, error) {
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return 0, nil
+	}
+	if formatoMilhar.MatchString(s) {
+		s = strings.ReplaceAll(s, ".", "")
 	}
 	if !formatoValor.MatchString(s) {
 		return 0, ErrValidacao{"valor": "use o formato 1234,56"}
