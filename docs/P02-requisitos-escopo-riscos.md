@@ -32,7 +32,7 @@ Total: 7 funcionais e 5 não funcionais (mínimo do manual: 6 e 2).
 | RN-04 | Telefone opcional; se informado, 10 ou 11 dígitos |
 | RN-05 | Descrição da OS: 10 a 500 caracteres |
 | RN-06 | Prazo = abertura + SLA: BAIXA 72 h, MEDIA 48 h, ALTA 24 h, CRITICA 4 h |
-| RN-07 | Valor: R$ 0,00 a R$ 50.000,00, até 2 casas decimais, formato `1234,56` |
+| RN-07 | Valor: R$ 0,00 a R$ 50.000,00, até 2 casas decimais, formato `1234,56`; aceita separador de milhar com vírgula decimal, como `1.500,00` (evolução por TDD, P11) |
 | RN-08 | Transições: ABERTA → EM_ANDAMENTO ou CANCELADA; EM_ANDAMENTO → CONCLUIDA ou CANCELADA; cancelar exige motivo com 10 ou mais caracteres |
 | RN-09 | OS atrasada: status ABERTA ou EM_ANDAMENTO e hora atual depois do prazo |
 | RN-10 | 5 falhas de login seguidas bloqueiam o e-mail por 15 minutos |
@@ -59,4 +59,5 @@ Conforme o manual, seção 9.3:
 
 A prioridade do risco é **Alta** quando: (a) o impacto é Alto e a probabilidade é Média ou Alta; ou (b) a probabilidade é Alta e o impacto é Médio ou Alto; ou (c) o risco é de segurança.
 Nos outros casos, a prioridade é **Média** se probabilidade ou impacto for Médio, e **Baixa** se os dois forem Baixos.
-A aba **Riscos** lista R-01 a R-11 com o requisito ligado e o teste que responde a cada risco.
+A aba **Riscos** lista R-01 a R-15 com o requisito ligado e o teste que responde a cada risco.
+R-12 a R-15 foram incluídos em 05/11/2026, na revisão final, porque RF-06, RF-07, RNF-02 e RNF-04 não tinham risco ligado.

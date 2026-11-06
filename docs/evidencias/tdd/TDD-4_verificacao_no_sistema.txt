@@ -1,0 +1,15 @@
+# Verificação no sistema em execução - 05/11/2026 21:21:46 -0300 - commit f107a8d
+# Servidor iniciado com -reset em banco temporário, porta 8081. Requisições HTTP reais ao formulário POST /ordens.
+login admin: HTTP 303
+valor='1.500,00' -> HTTP 303; OS antes=6 depois=7; erro=''; OS 7 {'valor_centavos': 150000}
+valor='12.345,6' -> HTTP 303; OS antes=7 depois=8; erro=''; OS 8 {'valor_centavos': 1234560}
+valor='1500,50' -> HTTP 303; OS antes=8 depois=9; erro=''; OS 9 {'valor_centavos': 150050}
+valor='1500.50' -> HTTP 303; OS antes=9 depois=10; erro=''; OS 10 {'valor_centavos': 150050}
+valor='1.50,00' -> HTTP 400; OS antes=10 depois=10; erro='use o formato 1234,56'; 
+valor='abc' -> HTTP 400; OS antes=10 depois=10; erro='use o formato 1234,56'; 
+valor='10,555' -> HTTP 400; OS antes=10 depois=10; erro='use o formato 1234,56'; 
+valor='50000,00' -> HTTP 303; OS antes=10 depois=11; erro=''; OS 11 {'valor_centavos': 5000000}
+valor='50.000,01' -> HTTP 400; OS antes=11 depois=11; erro='deve estar entre R$ 0,00 e R$ 50.000,00'; 
+--- detalhe da 1a OS criada (OS 7), texto do valor na tela:
+R$ 1.500,00
+# fim

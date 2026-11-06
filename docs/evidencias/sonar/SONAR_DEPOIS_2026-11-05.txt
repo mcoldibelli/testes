@@ -1,0 +1,75 @@
+# SonarQube, segunda análise - 05/11/2026 21:25:27 -0300
+# commit do código: f107a8d; instância nova (o contêiner da linha de base não existia mais); perfil padrão Sonar way
+{"id":"147B411E-AaGuPAEtDMqXikz2E05V","version":"26.11.0.134175","status":"UP"}
+{
+    "component": {
+        "key": "ordens-servico",
+        "name": "Ordens de Servico (P2 TQS)",
+        "qualifier": "TRK",
+        "measures": [
+            {
+                "metric": "coverage",
+                "value": "37.8",
+                "bestValue": false
+            },
+            {
+                "metric": "alert_status",
+                "value": "OK"
+            },
+            {
+                "metric": "bugs",
+                "value": "0",
+                "bestValue": true
+            },
+            {
+                "metric": "code_smells",
+                "value": "0",
+                "bestValue": true
+            },
+            {
+                "metric": "duplicated_lines_density",
+                "value": "0.0",
+                "bestValue": true
+            },
+            {
+                "metric": "ncloc",
+                "value": "1642"
+            },
+            {
+                "metric": "vulnerabilities",
+                "value": "0",
+                "bestValue": true
+            },
+            {
+                "metric": "security_hotspots",
+                "value": "0",
+                "bestValue": true
+            }
+        ]
+    }
+}
+quality gate: OK
+perfil: azureresourcemanager Sonar way core
+perfil: cloudformation Sonar way core
+perfil: cs Sonar way core
+perfil: css Sonar way core
+perfil: docker Sonar way core
+perfil: flex Sonar way core
+perfil: go Sonar way core
+perfil: ipynb Sonar way core
+perfil: java Sonar way core
+perfil: js Sonar way core
+perfil: json Sonar way comprehensive
+perfil: jsp Sonar way comprehensive
+perfil: kotlin Sonar way core
+perfil: kubernetes Sonar way core
+perfil: php Sonar way core
+perfil: py Sonar way core
+perfil: secrets Sonar way core
+perfil: terraform Sonar way core
+perfil: text Sonar way core
+perfil: ts Sonar way core
+perfil: vbnet Sonar way core
+perfil: web Sonar way core
+perfil: xml Sonar way core
+perfil: yaml Sonar way comprehensive

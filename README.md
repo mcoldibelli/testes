@@ -6,7 +6,7 @@
 |---|---|---|
 | Marcelo A. B. Coldibelli | 24210023 | Coordenação e planejamento; análise e execução manual; automação e qualidade |
 
-Trabalho individual: um integrante acumula os três papéis (manual, seção 4.2). Depende de autorização do professor (seção 4.1).
+Trabalho individual: um integrante acumula os três papéis (manual, seção 4.2). A decisão do professor está no P01.
 
 Turma: B · Grupo: AP1-TIM 26 · Professor: Prof. Dr. Elvio Gilberto da Silva
 
@@ -95,10 +95,10 @@ Abra <http://localhost:8080>. Para parar: `Ctrl+C` (o servidor termina as requis
 | Nível | Comando | Precisa do sistema rodando? |
 |---|---|---|
 | Unitário (UT-01 a UT-12) | `make test-unit` | Não |
-| Integração Go (IT-01 a IT-10) | `make test-integracao` | Não (sobe servidor e banco temporários) |
+| Integração Go (IT-01 a IT-12) | `make test-integracao` | Não (sobe servidor e banco temporários) |
 | Cobertura | `make cobertura` | Não |
 | API (API-01 a API-16) | `make test-api` | Sim |
-| Sistema/interface (ST-01 a ST-06) | `make test-e2e` | Sim |
+| Sistema/interface (ST-01 a ST-08) | `make test-e2e` | Sim |
 | Compatibilidade Firefox | `BROWSER=firefox make test-e2e` | Sim |
 | Desempenho (NF-01, NF-02) | `python3 tools/medir_desempenho.py listagem` e `... login` | Sim (use `make reset` antes) |
 | Análise de qualidade | `make sonar-up` e depois `export SONAR_TOKEN=<token>` e `make sonar` | Não |
@@ -124,14 +124,17 @@ Acesso: aba **Actions** do repositório.
 | P02 Requisitos, escopo e riscos | `docs/P02-requisitos-escopo-riscos.md` e abas Requisitos/Riscos da planilha |
 | P03 Plano de testes | `docs/P03-plano-de-testes.md` |
 | P04 Casos, P05 Rastreabilidade, P06 Execuções, P10 Métricas, P14 Diário | `docs/P2_TQS_planilha.xlsx` |
-| P07 Defeitos | GitHub Issues + aba Defeitos da planilha |
+| P07 Defeitos | GitHub Issues, aba Defeitos da planilha e `docs/P07-defeitos.csv` |
 | P08 Scripts | `internal/**/*_test.go`, `tests/postman/`, `tests/e2e/` |
 | P09 Aceitação e não funcionais | abas Aceitacao e NaoFuncionais da planilha |
-| P11 TDD, CI/CD e melhoria | `docs/P11-roteiro-tdd-cicd-qualidade.md` |
+| P11 TDD, CI/CD e melhoria | `docs/P11-roteiro-tdd-cicd-qualidade.md` e `docs/evidencias/tdd`, `docs/evidencias/cicd` |
+| P12 Relatório final | `docs/P12-relatorio-final.docx` e `.pdf` (gerados por `tools/gerar_relatorio.py`) |
+| P13 Apresentação e roteiro | `docs/P13-apresentacao.pptx` e `.pdf` (gerados por `tools/gerar_apresentacao.py`) e `docs/P13-roteiro-de-demonstracao.md` |
 | Estrutura do Drive | `make entrega` cria as pastas 00 a 16 em `entrega/` |
 
 Para gerar a planilha de novo (apaga o que foi preenchido): `tools/.venv/bin/python tools/gerar_planilha.py`
 (crie antes o venv: `python3 -m venv tools/.venv && tools/.venv/bin/pip install openpyxl==3.1.5`).
+Os geradores do relatório e da apresentação também precisam de `python-docx`, `python-pptx` e `matplotlib` nesse venv, e do LibreOffice para gerar os PDFs.
 
 ## 13. Credenciais fictícias
 
@@ -151,4 +154,4 @@ Todos os dados são fictícios. Os CPFs dos dados iniciais são números válido
 
 ## 15. Contato do grupo
 
-_preencher_
+Marcelo A. B. Coldibelli, GitHub: <https://github.com/mcoldibelli>
