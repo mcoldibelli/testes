@@ -14,6 +14,6 @@
 | Integrações existentes | Interface HTML → serviço → banco SQLite; API JSON → serviço → banco; o mesmo serviço atende a interface e a API |
 | Justificativa da escolha | Atende todos os requisitos mínimos da seção 5.3: código-fonte do grupo, execução local, 7 fluxos (2 formulários), persistência, integração entre camadas, dados fictícios e reset do ambiente (`-reset`). As regras têm intervalos e estados (CPF, limites de texto e valor, SLA, máquina de estados), o que permite aplicar particionamento de equivalência, valor limite e tabela de decisão. |
 | Riscos de viabilidade | (1) O framework de teste unitário não é JUnit: o pacote `testing` do Go precisa de aprovação (manual, seção 8.3). (2) O Selenium roda em Python porque não há cliente oficial em Go. (3) O SonarQube analisa Go, mas exige Docker na máquina. (4) O manual pede dupla ou trio (seção 4.1); o trabalho individual precisa de autorização expressa do professor. |
-| Decisão do professor | Aprovado / Aprovado com ajustes / Não aprovado |
-| Ajustes solicitados | |
-| Data da aprovação | |
+| Decisão do professor | Aprovado |
+| Ajustes solicitados | Nenhum |
+| Data da aprovação | _informar_ |

@@ -1,0 +1,101 @@
+# REFACTOR - 05/11/2026 21:05:00 -0300 - go version go1.26.5 darwin/arm64
+# base: 5568311 + refatoração; make test-unit test-integracao
+go test -count=1 -v ./internal/domain/...
+=== RUN   TestCPFValido
+=== RUN   TestCPFValido/válido_só_dígitos
+=== RUN   TestCPFValido/válido_com_máscara
+=== RUN   TestCPFValido/dígito_verificador_errado
+=== RUN   TestCPFValido/todos_os_dígitos_iguais
+=== RUN   TestCPFValido/10_dígitos_(limite_inferior_-_1)
+=== RUN   TestCPFValido/12_dígitos_(limite_superior_+_1)
+=== RUN   TestCPFValido/letras_no_meio
+=== RUN   TestCPFValido/vazio
+--- PASS: TestCPFValido (0.00s)
+    --- PASS: TestCPFValido/válido_só_dígitos (0.00s)
+    --- PASS: TestCPFValido/válido_com_máscara (0.00s)
+    --- PASS: TestCPFValido/dígito_verificador_errado (0.00s)
+    --- PASS: TestCPFValido/todos_os_dígitos_iguais (0.00s)
+    --- PASS: TestCPFValido/10_dígitos_(limite_inferior_-_1) (0.00s)
+    --- PASS: TestCPFValido/12_dígitos_(limite_superior_+_1) (0.00s)
+    --- PASS: TestCPFValido/letras_no_meio (0.00s)
+    --- PASS: TestCPFValido/vazio (0.00s)
+=== RUN   TestNovoCliente_LimitesDoNome
+--- PASS: TestNovoCliente_LimitesDoNome (0.00s)
+=== RUN   TestNovoCliente_EmailETelefone
+=== RUN   TestNovoCliente_EmailETelefone/dados_válidos,_telefone_vazio
+=== RUN   TestNovoCliente_EmailETelefone/telefone_com_10_dígitos
+=== RUN   TestNovoCliente_EmailETelefone/telefone_com_11_dígitos
+=== RUN   TestNovoCliente_EmailETelefone/telefone_com_9_dígitos
+=== RUN   TestNovoCliente_EmailETelefone/telefone_com_letras
+=== RUN   TestNovoCliente_EmailETelefone/e-mail_sem_arroba
+=== RUN   TestNovoCliente_EmailETelefone/e-mail_sem_ponto_no_domínio
+--- PASS: TestNovoCliente_EmailETelefone (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/dados_válidos,_telefone_vazio (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/telefone_com_10_dígitos (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/telefone_com_11_dígitos (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/telefone_com_9_dígitos (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/telefone_com_letras (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/e-mail_sem_arroba (0.00s)
+    --- PASS: TestNovoCliente_EmailETelefone/e-mail_sem_ponto_no_domínio (0.00s)
+=== RUN   TestNovoCliente_Normaliza
+--- PASS: TestNovoCliente_Normaliza (0.00s)
+=== RUN   TestNovaOrdem_LimitesDaDescricao
+--- PASS: TestNovaOrdem_LimitesDaDescricao (0.00s)
+=== RUN   TestNovaOrdem_LimitesDoValor
+--- PASS: TestNovaOrdem_LimitesDoValor (0.00s)
+=== RUN   TestNovaOrdem_PrazoPorPrioridade
+--- PASS: TestNovaOrdem_PrazoPorPrioridade (0.00s)
+=== RUN   TestAlterarStatus_TabelaDeTransicoes
+--- PASS: TestAlterarStatus_TabelaDeTransicoes (0.00s)
+=== RUN   TestAlterarStatus_CancelamentoExigeMotivo
+--- PASS: TestAlterarStatus_CancelamentoExigeMotivo (0.00s)
+=== RUN   TestAlterarStatus_ConcluirGravaData
+--- PASS: TestAlterarStatus_ConcluirGravaData (0.00s)
+=== RUN   TestOrdem_EstaAtrasada
+=== RUN   TestOrdem_EstaAtrasada/1_segundo_antes_do_prazo
+=== RUN   TestOrdem_EstaAtrasada/no_prazo_exato
+=== RUN   TestOrdem_EstaAtrasada/1_segundo_depois_do_prazo
+=== RUN   TestOrdem_EstaAtrasada/em_andamento_depois_do_prazo
+=== RUN   TestOrdem_EstaAtrasada/concluída_depois_do_prazo
+=== RUN   TestOrdem_EstaAtrasada/cancelada_depois_do_prazo
+--- PASS: TestOrdem_EstaAtrasada (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/1_segundo_antes_do_prazo (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/no_prazo_exato (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/1_segundo_depois_do_prazo (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/em_andamento_depois_do_prazo (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/concluída_depois_do_prazo (0.00s)
+    --- PASS: TestOrdem_EstaAtrasada/cancelada_depois_do_prazo (0.00s)
+=== RUN   TestParseValor
+--- PASS: TestParseValor (0.00s)
+=== RUN   TestFormatarValor
+--- PASS: TestFormatarValor (0.00s)
+PASS
+ok  	ordens-servico/internal/domain	0.410s
+go test -count=1 -v ./internal/web/...
+=== RUN   TestLogin
+--- PASS: TestLogin (0.39s)
+=== RUN   TestLogin_BloqueioAposCincoFalhas
+--- PASS: TestLogin_BloqueioAposCincoFalhas (0.74s)
+=== RUN   TestAPI_ExigeToken
+--- PASS: TestAPI_ExigeToken (0.19s)
+=== RUN   TestCliente_CriarBuscarEDuplicado
+--- PASS: TestCliente_CriarBuscarEDuplicado (0.29s)
+=== RUN   TestOrdem_ClienteInexistente
+--- PASS: TestOrdem_ClienteInexistente (0.28s)
+=== RUN   TestOrdem_CicloDeVida
+--- PASS: TestOrdem_CicloDeVida (0.29s)
+=== RUN   TestResumo_ContaAtrasadas
+--- PASS: TestResumo_ContaAtrasadas (0.29s)
+=== RUN   TestOrdens_Filtro
+--- PASS: TestOrdens_Filtro (0.29s)
+=== RUN   TestAPI_RecusaCampoDesconhecido
+--- PASS: TestAPI_RecusaCampoDesconhecido (0.19s)
+=== RUN   TestUI_SessaoEFormulario
+--- PASS: TestUI_SessaoEFormulario (0.28s)
+=== RUN   TestUI_ValorInvalidoNaoGravaOrdem
+--- PASS: TestUI_ValorInvalidoNaoGravaOrdem (0.38s)
+=== RUN   TestCliente_BuscaPorCPFComMascara
+--- PASS: TestCliente_BuscaPorCPFComMascara (0.29s)
+PASS
+ok  	ordens-servico/internal/web	4.424s
+# make exit: 0

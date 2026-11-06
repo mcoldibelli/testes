@@ -6,15 +6,22 @@ import (
 	"strings"
 )
 
-var formatoValor = regexp.MustCompile(`^\d{1,9}([.,]\d{1,2})?$`)
+var (
+	formatoDecimal = regexp.MustCompile(`^\d{1,9}([.,]\d{1,2})?$`)
+	// O ponto só é separador de milhar com vírgula decimal e grupos de 3 dígitos.
+	formatoMilhar = regexp.MustCompile(`^\d{1,3}(\.\d{3})+,\d{1,2}$`)
+)
 
-// ParseValor converte "1500", "1500,5" ou "1500.50" em centavos. Texto vazio vale zero.
+// ParseValor converte "1500", "1500,5", "1500.50" ou "1.500,00" em centavos. Texto vazio vale zero.
 func ParseValor(s string) (int64, error) {
 	s = strings.TrimSpace(s)
 	if s == "" {
 		return 0, nil
 	}
-	if !formatoValor.MatchString(s) {
+	if formatoMilhar.MatchString(s) {
+		s = strings.ReplaceAll(s, ".", "")
+	}
+	if !formatoDecimal.MatchString(s) {
 		return 0, ErrValidacao{"valor": "use o formato 1234,56"}
 	}
 	inteiro, frac, _ := strings.Cut(strings.ReplaceAll(s, ",", "."), ".")

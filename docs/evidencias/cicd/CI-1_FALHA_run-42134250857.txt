@@ -1,0 +1,149 @@
+
+X demo-ci CI mcoldibelli/testes#5 · 42134250857
+Triggered via push about 3 minutes ago
+
+JOBS
+X testes in 2m43s (ID 127618248975)
+  ✓ Set up job
+  ✓ Run actions/checkout@v4
+  ✓ Run actions/setup-go@v5
+  ✓ Preparar pasta de resultados
+  ✓ Análise estática (go vet)
+  X Testes unitários e de integração (Go)
+  - Cobertura de código
+  - Compilar e iniciar o sistema
+  - Run actions/setup-node@v4
+  - Testes de API (Postman/Newman)
+  - Run actions/setup-python@v5
+  - Testes de sistema (Selenium)
+  ✓ Publicar resultados
+  - Post Run actions/setup-go@v5
+  ✓ Post Run actions/checkout@v4
+  ✓ Complete job
+
+ANNOTATIONS
+! Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-go@v5, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+testes: .github#2
+
+X Process completed with exit code 1.
+testes: .github#108
+
+- "The ubuntu-latest label will migrate to Ubuntu 26 beginning October 19, 2026. For more information, see https://github.com/actions/runner-images/issues/14748"
+testes: .github#1
+
+
+ARTIFACTS
+resultados-13
+
+To see what failed, try: gh run view 42134250857 --log-failed
+View this run on GitHub: https://github.com/mcoldibelli/testes/actions/runs/42134250857
+
+=== log do passo com falha ===
+testes	Testes unitários e de integração (Go)	﻿2026-11-06T00:06:31.7396185Z ##[group]Run go test -count=1 -race -v -coverprofile=coverage.out ./... | tee resultados/go-test.txt
+testes	Testes unitários e de integração (Go)	2026-11-06T00:06:31.7396822Z ^[[36;1mgo test -count=1 -race -v -coverprofile=coverage.out ./... | tee resultados/go-test.txt^[[0m
+testes	Testes unitários e de integração (Go)	2026-11-06T00:06:31.7441607Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+testes	Testes unitários e de integração (Go)	2026-11-06T00:06:31.7441919Z ##[endgroup]
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8000215Z 	ordens-servico/cmd/server		coverage: 0.0% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8000959Z 	ordens-servico/internal/app		coverage: 0.0% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8161028Z === RUN   TestCPFValido
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8166786Z === RUN   TestCPFValido/válido_só_dígitos
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8183621Z === RUN   TestCPFValido/válido_com_máscara
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8220993Z === RUN   TestCPFValido/dígito_verificador_errado
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8250917Z === RUN   TestCPFValido/todos_os_dígitos_iguais
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8281143Z === RUN   TestCPFValido/10_dígitos_(limite_inferior_-_1)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8302716Z === RUN   TestCPFValido/12_dígitos_(limite_superior_+_1)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8304993Z === RUN   TestCPFValido/letras_no_meio
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8322954Z === RUN   TestCPFValido/vazio
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8351846Z --- PASS: TestCPFValido (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8373474Z     --- PASS: TestCPFValido/válido_só_dígitos (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8384945Z     --- PASS: TestCPFValido/válido_com_máscara (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8385628Z     --- PASS: TestCPFValido/dígito_verificador_errado (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8386326Z     --- PASS: TestCPFValido/todos_os_dígitos_iguais (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8386985Z     --- PASS: TestCPFValido/10_dígitos_(limite_inferior_-_1) (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8387662Z     --- PASS: TestCPFValido/12_dígitos_(limite_superior_+_1) (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8388176Z     --- PASS: TestCPFValido/letras_no_meio (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8388788Z     --- PASS: TestCPFValido/vazio (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8389146Z === RUN   TestNovoCliente_LimitesDoNome
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8389535Z --- PASS: TestNovoCliente_LimitesDoNome (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8390131Z === RUN   TestNovoCliente_EmailETelefone
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8390682Z === RUN   TestNovoCliente_EmailETelefone/dados_válidos,_telefone_vazio
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8391299Z === RUN   TestNovoCliente_EmailETelefone/telefone_com_10_dígitos
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8391853Z === RUN   TestNovoCliente_EmailETelefone/telefone_com_11_dígitos
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8392451Z === RUN   TestNovoCliente_EmailETelefone/telefone_com_9_dígitos
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8393413Z === RUN   TestNovoCliente_EmailETelefone/telefone_com_letras
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8393882Z === RUN   TestNovoCliente_EmailETelefone/e-mail_sem_arroba
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8394481Z === RUN   TestNovoCliente_EmailETelefone/e-mail_sem_ponto_no_domínio
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8394977Z --- PASS: TestNovoCliente_EmailETelefone (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8395669Z     --- PASS: TestNovoCliente_EmailETelefone/dados_válidos,_telefone_vazio (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8396540Z     --- PASS: TestNovoCliente_EmailETelefone/telefone_com_10_dígitos (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8397372Z     --- PASS: TestNovoCliente_EmailETelefone/telefone_com_11_dígitos (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8398138Z     --- PASS: TestNovoCliente_EmailETelefone/telefone_com_9_dígitos (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8398822Z     --- PASS: TestNovoCliente_EmailETelefone/telefone_com_letras (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8399465Z     --- PASS: TestNovoCliente_EmailETelefone/e-mail_sem_arroba (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8400348Z     --- PASS: TestNovoCliente_EmailETelefone/e-mail_sem_ponto_no_domínio (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8400857Z === RUN   TestNovoCliente_Normaliza
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8401209Z --- PASS: TestNovoCliente_Normaliza (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8401582Z === RUN   TestNovaOrdem_LimitesDaDescricao
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8401975Z --- PASS: TestNovaOrdem_LimitesDaDescricao (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8402359Z === RUN   TestNovaOrdem_LimitesDoValor
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8402723Z --- PASS: TestNovaOrdem_LimitesDoValor (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8403097Z === RUN   TestNovaOrdem_PrazoPorPrioridade
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8441698Z     ordem_test.go:56: CRITICA: prazo = 2026-09-01 14:00:00 +0000 UTC, quer 2026-09-01 15:00:00 +0000 UTC
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8442290Z --- FAIL: TestNovaOrdem_PrazoPorPrioridade (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8442672Z === RUN   TestAlterarStatus_TabelaDeTransicoes
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8443065Z --- PASS: TestAlterarStatus_TabelaDeTransicoes (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8443482Z === RUN   TestAlterarStatus_CancelamentoExigeMotivo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8443916Z --- PASS: TestAlterarStatus_CancelamentoExigeMotivo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8444322Z === RUN   TestAlterarStatus_ConcluirGravaData
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8444685Z --- PASS: TestAlterarStatus_ConcluirGravaData (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8445050Z === RUN   TestOrdem_EstaAtrasada
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8445407Z === RUN   TestOrdem_EstaAtrasada/1_segundo_antes_do_prazo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8445800Z === RUN   TestOrdem_EstaAtrasada/no_prazo_exato
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8446198Z === RUN   TestOrdem_EstaAtrasada/1_segundo_depois_do_prazo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8446661Z === RUN   TestOrdem_EstaAtrasada/em_andamento_depois_do_prazo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8447379Z === RUN   TestOrdem_EstaAtrasada/concluída_depois_do_prazo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8447837Z === RUN   TestOrdem_EstaAtrasada/cancelada_depois_do_prazo
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8448254Z --- PASS: TestOrdem_EstaAtrasada (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8448816Z     --- PASS: TestOrdem_EstaAtrasada/1_segundo_antes_do_prazo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8449426Z     --- PASS: TestOrdem_EstaAtrasada/no_prazo_exato (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8451223Z     --- PASS: TestOrdem_EstaAtrasada/1_segundo_depois_do_prazo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8452681Z     --- PASS: TestOrdem_EstaAtrasada/em_andamento_depois_do_prazo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8455227Z     --- PASS: TestOrdem_EstaAtrasada/concluída_depois_do_prazo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8456127Z     --- PASS: TestOrdem_EstaAtrasada/cancelada_depois_do_prazo (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8456582Z === RUN   TestParseValor
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8456893Z --- PASS: TestParseValor (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8457220Z === RUN   TestFormatarValor
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8457522Z --- PASS: TestFormatarValor (0.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8457816Z FAIL
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8458721Z coverage: 86.7% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.8459135Z FAIL	ordens-servico/internal/domain	0.023s
+testes	Testes unitários e de integração (Go)	2026-11-06T00:07:24.9802431Z 	ordens-servico/internal/store		coverage: 0.0% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3373689Z === RUN   TestLogin
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3374407Z --- PASS: TestLogin (4.30s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3374777Z === RUN   TestLogin_BloqueioAposCincoFalhas
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3375208Z --- PASS: TestLogin_BloqueioAposCincoFalhas (7.81s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3375619Z === RUN   TestAPI_ExigeToken
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3375933Z --- PASS: TestAPI_ExigeToken (2.21s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3376288Z === RUN   TestCliente_CriarBuscarEDuplicado
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3376694Z --- PASS: TestCliente_CriarBuscarEDuplicado (2.97s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3377097Z === RUN   TestOrdem_ClienteInexistente
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3377456Z --- PASS: TestOrdem_ClienteInexistente (3.61s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3377704Z === RUN   TestOrdem_CicloDeVida
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3377964Z --- PASS: TestOrdem_CicloDeVida (3.76s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3378267Z === RUN   TestResumo_ContaAtrasadas
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3378495Z --- PASS: TestResumo_ContaAtrasadas (3.00s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3378727Z === RUN   TestOrdens_Filtro
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3378935Z --- PASS: TestOrdens_Filtro (3.41s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3379176Z === RUN   TestAPI_RecusaCampoDesconhecido
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3379437Z --- PASS: TestAPI_RecusaCampoDesconhecido (1.96s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3379695Z === RUN   TestUI_SessaoEFormulario
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3380141Z --- PASS: TestUI_SessaoEFormulario (3.10s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3380513Z === RUN   TestUI_ValorInvalidoNaoGravaOrdem
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3380916Z --- PASS: TestUI_ValorInvalidoNaoGravaOrdem (4.26s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3381192Z === RUN   TestCliente_BuscaPorCPFComMascara
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3381454Z --- PASS: TestCliente_BuscaPorCPFComMascara (3.10s)
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3381918Z PASS
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3382163Z coverage: 50.9% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3382596Z ok  	ordens-servico/internal/web	44.518s	coverage: 50.9% of statements
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.3383021Z FAIL
+testes	Testes unitários e de integração (Go)	2026-11-06T00:08:09.5348370Z ##[error]Process completed with exit code 1.
